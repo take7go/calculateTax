@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>お金まとめサイト</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="お金と税金のまとめ">
+	<meta name="keywords" content="税金,企業型DC,ideco,NISA,ふるさと納税">
+	<link rel="stylesheet" href="css/style.css">
+	<script src="js/openclose.js"></script>
+	<script src="js/fixmenu_pagetop.js"></script>
+	<script src="js/tax.js"></script>
+	<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<![endif]-->
+</head>
+
+<body class="top">
+	<div id="container">
+		<header>
+			<div class="inner">
+				<h1 id="logo"><a href="index.html"><img src="images/money_kinbut.png" style="width: 30%;"
+							alt="MONEY & TAX SITE"></a></h1>
+				<!--PC用（801px以上端末）メニュー-->
+				<nav id="menubar">
+					<ul>
+						<li class="current"><a href="index.html">現在</a></li>
+						<li><a href="oldage.html">老後</a></li>
+						<li><a href="contact.html">問い合わせ</a></li>
+					</ul>
+				</nav>
+			</div>
+			<!--/.inner-->
+		</header>
+		<!--小さな端末用（800px以下端末）メニュー-->
+		<nav id="menubar-s">
+			<ul>
+				<li class="current"><a href="index.html">現在</a></li>
+				<li><a href="oldage.html">老後</a></li>
+				<li><a href="contact.html">問い合わせ</a></li>
+			</ul>
+		</nav>
+
+		<div class="inner">
+			<div id="contents">
+				<div id="main">
+					<!-- 月収年収計算 -->
+					<section>
+						<h2 id="calculateIncome">月収年収計算</h2>
+						月収(万円)：<input type="number" id="monthlyIncome" size=10 value="26.45">
+						<input type="button" onclick="calculateAnnualIncome()" value="年収計算"><br>
+						ボーナス(万円)：<input type="number" id="Bonus" size=10 value="52.9">
+						その他手当(万円)：<input type="number" id="Allowance" size=10 value="0"><br>
+						　※ 月収(万円) × 12ヶ月 + ボーナス(万円) + その他手当(万円) = 年収(万円)<br>
+						年収(万円)：<input type="number" id="annualIncome" size=10 value="370.3">
+						<input type="button" onclick="calculateMonthlyIncome()" value="月収計算"><br>
+						　※ (年収(万円) - ボーナス(万円) - その他手当(万円)) / 12ヶ月 = 月収(万円)
+					</section>
+
+					<!-- 給与所得控除 -->
+					<section>
+						<h2 id="calculateEmploymentIncome">給与所得計算</h2>
+						年収(万円)：<input type="number" id="annualIncome_ei" size=10 value="370.3">
+						<input type="button" onclick="calculateAnnualIncome()" value="給与所得計算"><br>
+						年間給与所得以外の所得(万円)：<input type="number" id="noneAnnualIncome_ei" size=10 value="12"><br>
+						参考文献：<a href="https://www.nta.go.jp/taxes/shiraberu/taxanswer/gensen/2508.htm"
+						target="_blank">給与所得となるもの(国税庁)</a>，<a href="https://www.dodadsj.com/content/200908_commuting-allowance/"
+						target="_blank">非課税・課税ルール(外部サイト)</a><br>
+						特定支出控除(万円)：<input type="number" id="annualIncome_ei" size=10 value="0">
+						※ 給与所得控除後の所得金額から引く<br>
+						　※ 給与所得(万円) = 年収(万円) - 給与所得控除(万円) - 特定支出控除(万円)<br>
+						給与所得(万円)：<input type="number" id="annualIncome_ei" size=10 value="0">
+					</section>
+
+					<!-- 所得税計算 -->
+					<section>
+						<h2 id="calculateIncomeTax">所得税計算</h2>
+						<form>
+							所得(万円)：<input type="number" id="income" size=10 value="650.0">
+							所得控除(万円)：<input type="number" id="incomeDeduction" size=10 value="48">
+							<input type="button" onclick="calculateIncomeTax()" value="所得税計算"><br>
+							課税所得(万円)：<input type="number" id="taxableIncome" size=10 value="317.4">
+							所得税(万円)：<input type="number" id="incomeTax" size=10 value="317.4">
+							<input type="button" onclick="calculateIncomeTaxReverse()" value="課税所得計算(概算)">
+						</form>
+
+						<div
+							onclick="obj=document.getElementById('koujoichiran').style; obj.display=(obj.display=='none')?'block':'none';">
+							<h4 style="cursor:pointer;">▼所得控除一覧(外部サイトリンク)</h4>
+						</div>
+
+						<div id="koujoichiran" style="display:none;clear:both;">
+							<a href="https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1110.htm"
+								target="_blank">⚫︎1雑損控除(国税庁サイト)</a><br>
+							<a href="https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1120.htm"
+								target="_blank">⚫︎2医療費控除(国税庁サイト)</a>　※控除額=医療費-保険金-10万円<br>
+							<a href="https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1130.htm"
+								target="_blank">⚫︎3社会保険料控除(国税庁サイト)</a><br>
+							<a href="https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1135.htm"
+								target="_blank">⚫︎4小規模企業共済等掛金控除(国税庁サイト)</a>　※ideco, 企業型DC等のその年に支払った掛金の全額<br>
+							<a href="https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1140.htm"
+								target="_blank">⚫︎5生命保険料控除(国税庁サイト)</a><br>
+							<a href="https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1145.htm"
+								target="_blank">⚫︎6地震保険料控除(国税庁サイト)</a><br>
+							<a href="https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1150.htm"
+								target="_blank">⚫︎7寄附金控除(国税庁サイト)</a><br>
+							<a href="https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1160.htm"
+								target="_blank">⚫︎8障害者控除(国税庁サイト)</a>　※扶養控除の適用がない16歳未満の扶養親族でも適用可<br>
+							<a href="https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1170.htm"
+								target="_blank">⚫︎9寡婦控除(国税庁サイト)</a>　※合計所得500万円以下<br>
+							<a href="https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1171.htm"
+								target="_blank">⚫︎10ひとり親控除(国税庁サイト)</a>　※合計所得500万円以下<br>
+							<a href="https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1175.htm"
+								target="_blank">⚫︎11勤労学生控除(国税庁サイト)</a><br>
+							<a href="https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1191.htm"
+								target="_blank">⚫︎12配偶者控除(国税庁サイト)</a>　※合計所得1000万円以下<br>
+							<a href="https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1195.htm"
+								target="_blank">⚫︎13配偶者特別控除(国税庁サイト)</a>　※合計所得1000万円以下<br>
+							<a href="https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1180.htm"
+								target="_blank">⚫︎14扶養控除(国税庁サイト)</a>　※被扶親族が16歳以上<br>
+
+							<div
+								onclick="obj=document.getElementById('kisokoujo').style; obj.display=(obj.display=='none')?'block':'none';">
+								<a style="cursor:pointer;">▼15基礎控除</a>
+							</div>
+
+							<div id="kisokoujo" style="clear:both;">
+								<table class="ta2">
+									<tbody>
+										<tr>
+											<th style="text-align: center;">個人の合計所得金額</th>
+											<th style="text-align: center;">控除額</th>
+										</tr>
+										<tr>
+											<td>2,400万円以下</td>
+											<td style="text-align: center;">48万円</td>
+										</tr>
+										<tr>
+											<td>2,400万円超2,450万円以下</td>
+											<td style="text-align: center;">32万円</td>
+										</tr>
+										<tr>
+											<td>2,450万円超2,500万円以下</td>
+											<td style="text-align: center;">16万円</td>
+										</tr>
+										<tr>
+											<td>2,500万円超</td>
+											<td style="text-align: center;">０円</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							⚫︎参考：<a href="https://www.nta.go.jp/publication/pamph/koho/kurashi/html/01_1.htm#sanshiki02"
+								target="_blank">基礎控除</a>
+						</div>
+
+						参考文献：<a href="https://www.nta.go.jp/publication/pamph/koho/kurashi/html/01_1.htm"
+							target="_blank">所得税のしくみ</a>
+					</section>
+
+					<section id="new">
+						<h2>更新情報・お知らせ</h2>
+						<dl>
+							<dt>2023/06/20</dt>
+							<dd>作成開始</dd>
+							<!-- <dt>20XX/00/00</dt>
+<dd>サンプルテキスト。サンプルテキスト。サンプルテキスト。</dd> -->
+						</dl>
+						<!-- <p class="r">&raquo;&nbsp;<a href="#">過去ログ</a></p> -->
+					</section>
+				</div>
+				<!--/mainおわり-->
+
+				<!-- subはじまり -->
+				<div id="sub">
+					<nav>
+						<h2>Contents</h2>
+						<ul class="submenu">
+							<li><a href="#calculateIncome">月収年収計算</a></li>
+							<li><a href="#">メニュー</a></li>
+							<li><a href="#">メニュー</a></li>
+							<li><a href="#">メニュー</a></li>
+							<li><a href="#">メニュー</a></li>
+						</ul>
+					</nav>
+				</div>
+				<!--/#subおわり-->
+
+			</div>
+			<!--/#contentsおわり-->
+
+		</div>
+		<!--/.innerおわり-->
+
+		<footer>
+			<small>Copyright&copy; <a href="index.html">お金まとめサイト</a> All Rights Reserved.</small>
+			<span class="pr"><a href="https://template-party.com/" target="_blank">Web Design:Template-Party</a></span>
+		</footer>
+
+	</div>
+	<!--/container-->
+
+	<!--ページの上部に戻る「↑」ボタン-->
+	<p class="nav-fix-pos-pagetop"><a href="">↑</a></p>
+
+	<!--メニュー開閉ボタン-->
+	<div id="menubar_hdr" class="close"></div>
+	<!--メニューの開閉処理条件設定　800px以下-->
+	<script>
+		if (OCwindowWidth() <= 800) {
+			open_close("menubar_hdr", "menubar-s");
+		}
+	</script>
+
+</body>
+
+</html>
